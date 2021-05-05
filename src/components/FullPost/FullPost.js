@@ -6,7 +6,8 @@ import { APIConfig } from '../../store/API-Config';
 
 const FullPost = (props) => {
 
-    const postAPI = useContext(APIConfig);
+    const APIs = useContext(APIConfig);
+    const postAPI = APIs.postAPI; 
 
 
     const headers = {
@@ -40,7 +41,7 @@ const FullPost = (props) => {
     const deletePost = () => {
         axios.delete(postAPI + props.match.params.id, { headers })
             .then(response => {
-                props.history.push('/posts');
+                props.history.push('/');
                 console.log(response);
             });
     };

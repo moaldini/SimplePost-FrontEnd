@@ -6,15 +6,19 @@ import { Route, Link, Switch, Redirect } from 'react-router-dom';
 import { LikedPosts } from '../../store/LikedPosts';
 import { APIConfig } from '../../store/API-Config';
 
-// {postAPI:'http://localhost:8080/posts/' , userAPI:'http://localhost:8080/users/' }
+
 const Blog = (props) => {
 
-    const auth = null;
     const [likedPosts, setLikedPosts] = useState([]);
 
     return (
 
-        <APIConfig.Provider value={'http://localhost:8080/posts/'}>
+        <APIConfig.Provider value={
+            {
+                postAPI: 'http://localhost:8080/posts/',
+                userAPI: 'http://localhost:8080/users/'
+            }
+        }>
             <LikedPosts.Provider value={{ likedPosts, setLikedPosts }}>
                 <div className="Blog">
                     <header>
@@ -22,7 +26,7 @@ const Blog = (props) => {
                             <ul>
                                 <li><Link to="/posts"> Posts</Link></li>
                                 <li><Link to={{
-                                    pathname: '/new-post',   // props.match.url + to get 
+                                    pathname: '/new-post',                      // props.match.url + to get 
                                     hash: '#submit',
                                     search: '?quick-submit=true'
                                 }}>New Post</Link></li>
@@ -37,11 +41,11 @@ const Blog = (props) => {
                         <Route path="/new-post" component={NewPost} />
                         <Route path="/posts" component={Posts} />
                         <Redirect from="/" to="/posts" />      {/* THis will change the url  */}
-                        {/* <Route render={()=> <h1> Not Found</h1>} />  */}
+                        {/* <Route render={()=> <h1> Page Not Found</h1>} />  */}
 
                         {/* Also conditional redirect  */}
-
                     </Switch>
+
                 </div>
             </LikedPosts.Provider >
         </APIConfig.Provider>

@@ -1,50 +1,60 @@
 import axios from 'axios';
-import React, { useState , useEffect, useContext } from 'react';
-import {Redirect} from 'react-router-dom';
+import React, { useContext, useRef } from 'react';
 import { APIConfig } from '../../store/API-Config';
 
 import './NewPost.css';
 
 const NewPost = (props) => {
 
-    const postAPI = useContext(APIConfig);
-    
+    const APIs = useContext(APIConfig);
+    const postAPI = APIs.postAPI;
 
-    const [post, setPost] = useState( {
-        title:'', 
-        content:'',
-        author:'Dean',
-    });
+    const newPostForm = useRef();
+
+    const titleVal = useRef();
+
 
     const PostDataHandler = () => {
-        const data = {...post};
-        axios.post(postAPI , data)
-        .then(data => {
-        console.log('Success:', data);
-        props.history.push('/posts'); // push will add it to the page stack, replace will just replace the component  // props.history.replace('/posts'); 
-        })
-        .catch((error) => {
-        console.error('Error:', error);
-        });
-    }
-  
 
-        return (
-            <div className="NewPost">
+        const form = newPostForm.current
+        const data = { title: form['title'].value, content: form['content'].value, author: form['author'].value };
+        console.log(data);
+        axios.post(postAPI, data)
+            .then(data => {
+                console.log('Success:', data);
+                props.history.push('/posts'); // push will add it to the page stack, replace will just replace the component  // props.history.replace('/posts'); 
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+
+    return (
+        <div className="NewPost">
+            <form ref={newPostForm}>
                 <h1>Add a Post</h1>
                 <label>Title</label>
-                <input type="text" value={post.title} onChange={(event) => setPost({...post, title: event.target.value})} /> 
+                <input type="text" label={'title'} name={'title'} />
+
                 <label>Content</label>
-                <textarea rows="4" value={post.content} onChange={(event) => setPost({...post, content: event.target.value})} />
+                <textarea  rows="4" label={'content'} name={'content'} />
+
                 <label>Author</label>
-                <select value={post.author} onChange={(event) => setPost({...post, author: event.target.value})}>
+                <select label={'author'} name={'author'} >
                     <option value="Dean">Dean</option>
                     <option value="Moe">Moe</option>
                 </select>
-                <button onClick={PostDataHandler}>Add Post</button>
-            </div>
-        );
-    }
+            </form>
+            <button onClick={PostDataHandler}>Add Post </button>
 
 
+            <input ref={titleVal} type="text" label={'i'} name={'i'} />
+
+            <button onClick={()=> {console.log(titleVal.current.value)} }>Print Val </button>
+   
+        </div>
+    );
+}
+// if i didnt use a form, you will get a Chrome sendrequest error: TypeError: Converting circular structure to JSON
 export default NewPost;
