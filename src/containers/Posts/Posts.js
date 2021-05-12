@@ -10,8 +10,8 @@ import { Test } from './Test';
 
 const Posts = (props) => {
 
-    const APIs = useContext(APIConfig);
-    const postAPI = APIs.postAPI;
+    const APIs = useContext(APIConfig)
+    const postAPI = APIs.postAPI
 
     //=================EXPLANATION====================
     const [value, setValue] = useState(0);  // click button , sends textInput
